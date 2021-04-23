@@ -101,3 +101,15 @@ def generate_token_response(user: str):
     response.status_code = 200
     # set_access_cookies(response, access_token)
     return response
+
+class getUserAPI(Resource):
+    def get(self) -> Response:
+        user = Users.objects.values_list('_id', 'name', 'tel', 'salary', 'job_position',)
+        if len(user) > 0:
+            response = jsonify(user)
+            response.status_code = 200
+            return response
+        else:
+            response = Response()
+            response.status_code = 204
+            return response
