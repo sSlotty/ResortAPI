@@ -9,13 +9,14 @@ from models.users import Users
 from mongoengine import *
 import json
 
+import uuid
 
 class GuestAPI(Resource):
 
     def post(self) -> Response:
         body = request.get_json()
 
-        key = str(round(time.time() * 999))
+        key = str(uuid.uuid4().int)
         data = {
             '_id': key,
             'userID': body['userID'],

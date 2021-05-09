@@ -11,7 +11,7 @@ class Users(Document):
     password = StringField(required=True, min_length=6, regex=None)
     name = StringField(required=True)
     tel = StringField(required=True, max_length=10)
-    dob = DateTimeField(required=False, default=datetime.utcnow())
+    dob = DateTimeField(required=False)
     salary = IntField(required=False)
     gender = StringField(required=True)
     job_position = StringField(required=True)

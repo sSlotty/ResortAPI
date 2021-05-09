@@ -16,14 +16,14 @@ from mongoengine import DoesNotExist
 from models.oauth.error import OAuthErrorResponse
 from models.oauth.token import TokenResponse
 from models.users import Users
-
+import uuid
 
 class SignUpAPI(Resource):
     # Register
     def post(self) -> Response:
         body = request.get_json()
 
-        key = str(round(time.time() * 999))
+        key = str(uuid.uuid4().int)
         data = {
             '_id': key,
             'username': body['username'],

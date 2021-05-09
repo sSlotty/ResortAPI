@@ -11,7 +11,7 @@ def create_route(api: Api):
     api.add_resource(SignUpAPI, '/authentication/signup')
     api.add_resource(TokenAPI, '/authentication/token')
     api.add_resource(RefreshToken, '/authentication/token/refresh')
-    api.add_resource(getUserAPI, '/getuser')
+    api.add_resource(getUserAPI, '/user')
 
     api.add_resource(GuestAPI, '/guests')
     api.add_resource(GuestIdAPI, '/guests/id')
