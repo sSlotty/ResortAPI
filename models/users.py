@@ -6,15 +6,15 @@ from datetime import datetime
 
 
 class Users(Document):
-    _id = StringField(required=True, primary_key=True)
+    _id = StringField(required=False, primary_key=True)
     username = StringField(required=True, unique=True)
     password = StringField(required=True, min_length=6, regex=None)
-    name = StringField(required=True)
-    tel = StringField(required=True, max_length=10)
+    name = StringField(required=False)
+    tel = StringField(required=False, max_length=10)
     dob = DateTimeField(required=False)
     salary = IntField(required=False)
-    gender = StringField(required=True)
-    job_position = StringField(required=True)
+    gender = StringField(required=False)
+    job_position = StringField(required=False)
 
     def generate_pw_hash(self):
         self.password = generate_password_hash(
