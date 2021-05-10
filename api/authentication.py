@@ -45,7 +45,7 @@ class SignUpAPI(Resource):
 class TokenAPI(Resource):
     # Login
     def post(self) -> Response:
-        body = request.form.to_dict()
+        body = request.get_json()
         if body.get is None or body.get is None:
             response = jsonify(
                 OAuthErrorResponse(
@@ -56,8 +56,8 @@ class TokenAPI(Resource):
             return response
 
         try:
-            user: Users = Users.objects.get
-            auth_success = user.check_pw_hash(body.get)
+            user: Users = Users.objects.get(username=body.get('username'))
+            auth_success = user.check_pw_hash(body.get('password'))
             if not auth_success:
                 response = jsonify(
                     OAuthErrorResponse(
