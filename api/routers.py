@@ -3,7 +3,7 @@ from flask_restful import Api
 from api.authentication import SignUpAPI, TokenAPI, RefreshToken, getUserAPI
 
 from api.guest import GuestIdAPI, GuestAPI
-from api.room import RoomIdAPI, RoomAPI
+from api.room import RoomIdAPI, RoomAPI, RoomStatus
 from api.transaction import TransactionIdAPI, TransactionAPI, CheckOutAPI, getAllTransacByStatus, CheckOutIdAPI
 
 
@@ -18,6 +18,7 @@ def create_route(api: Api):
 
     api.add_resource(RoomAPI, '/rooms')
     api.add_resource(RoomIdAPI, '/rooms/id')
+    api.add_resource(RoomStatus,'/rooms/status')
 
     api.add_resource(TransactionAPI, '/transactions')  # Checkin
     api.add_resource(TransactionIdAPI, '/transactions/id')  # get Transaction by id

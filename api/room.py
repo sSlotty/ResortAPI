@@ -99,3 +99,17 @@ class RoomIdAPI(Resource):
         else:
             response = Response("no have room ID" + body['roomID'], status=400)
             return response
+
+
+class RoomStatus(Resource):
+    def get(self) -> Response:
+        status = request.args.get('status')
+        room = Rooms.objects(room_status=status)
+        if len(room) > 0:
+            response = jsonify(room)
+            response.status_code = 200
+            return response
+        else:
+            response = Response()
+            response.status_code = 204
+            return response
