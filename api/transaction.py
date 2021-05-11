@@ -10,7 +10,7 @@ from models.rooms import RoomsCheckIn, Rooms
 from models.transactions import Transactions
 from models.payments import Payments
 
-
+import uuid
 class TransactionAPI(Resource):
     def post(self) -> Response:
 
@@ -34,7 +34,7 @@ class TransactionAPI(Resource):
 
         if status == "False":
             if len(room_id) > 0:
-                key = str(round(time.time() * 999))
+                key = str(uuid.uuid4().int)[4,7]
                 data = {
                     'transactionID': key,
                     'userID': body['userID'],
@@ -149,7 +149,7 @@ class CheckOutAPI(Resource):
             staff = local[0]['users']
             room = local[0]['room']
 
-            key = str(round(time.time() * 999))
+            key = str(uuid.uuid4().int)[4,7]
             checkIN = str(local[0]['check_in']).format("%Y-%m-%d")
             checkOUT = body['check_out']
             days = days_between(checkIN, checkOUT)

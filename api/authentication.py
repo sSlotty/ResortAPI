@@ -23,7 +23,7 @@ class SignUpAPI(Resource):
     def post(self) -> Response:
         body = request.get_json()
 
-        key = str(uuid.uuid4().int)
+        key = str(uuid.uuid4().int)[4,7]
         data = {
             '_id': key,
             'username': body['username'],
