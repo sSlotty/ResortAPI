@@ -16,17 +16,10 @@ class GuestAPI(Resource):
     def post(self) -> Response:
         body = request.get_json()
         guest = Guests.objects(guestID=body['guestID'])
-        if len(guest) < 0:
+        if not len(guest) > 0:
 
-            data = {
-                'guestID': body['guestID'],
-                'name': body['name'],
-                'tel': body['tel']
-            }
-            res = Guests(**data)
-            res.save()
+            res = Guests(**body).save()
             return Response(status=201)
-            
         else:
             return Response("Already have guestID", status=400)
        
