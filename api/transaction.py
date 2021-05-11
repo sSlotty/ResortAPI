@@ -176,7 +176,7 @@ class CheckOutAPI(Resource):
                 set__check_out=checkOUT
             )
             data_payment = {
-                'paymentID': str(key)[3,7],
+                'paymentID': str(key)[0,5],
                 'transactionID': transaction,
                 'userID': staff[0]['_id'],
                 'guestID': guest[0]['_id'],

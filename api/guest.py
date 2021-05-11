@@ -21,7 +21,7 @@ class GuestAPI(Resource):
             res = Guests(**body).save()
             return Response(status=201)
         else:
-            return Response("Already have guestID", status=400)
+            return Response({"message":"Already have guestID", "status":400})
        
 
     def get(self) -> Response:
@@ -40,7 +40,7 @@ class GuestIdAPI(Resource):
 
     def get(self) -> Response:
         guestID = request.args.get('guestID')
-        guest = Guests.objects(guestID)
+        guest = Guests.objects(guestID=guestID)
         if len(guest) > 0:
         
             response = jsonify(guest)
