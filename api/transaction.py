@@ -34,9 +34,9 @@ class TransactionAPI(Resource):
 
         if status == "False":
             if len(room_id) > 0:
-                key = str(uuid.uuid4().int)[4,7]
+                key = uuid.uuid4().int
                 data = {
-                    'transactionID': key,
+                    'transactionID': str(key)[3,7],
                     'userID': body['userID'],
                     'guestID': body['guestID'],
                     'roomID': body['roomID'],
@@ -149,7 +149,7 @@ class CheckOutAPI(Resource):
             staff = local[0]['users']
             room = local[0]['room']
 
-            key = str(uuid.uuid4().int)[4,7]
+            key = uuid.uuid4().int
             checkIN = str(local[0]['check_in']).format("%Y-%m-%d")
             checkOUT = body['check_out']
             days = days_between(checkIN, checkOUT)
@@ -176,7 +176,7 @@ class CheckOutAPI(Resource):
                 set__check_out=checkOUT
             )
             data_payment = {
-                'paymentID': key,
+                'paymentID': str(key)[3,7],
                 'transactionID': transaction,
                 'userID': staff[0]['_id'],
                 'guestID': guest[0]['_id'],

@@ -16,9 +16,9 @@ class GuestAPI(Resource):
     def post(self) -> Response:
         body = request.get_json()
 
-        key = str(uuid.uuid4().int)[3,7]
+        key = uuid.uuid4().int
         data = {
-            '_id': key,
+            '_id': str(key)[3,7],
             'userID': body['userID'],
             'name': body['name'],
             'tel': body['tel']
