@@ -36,7 +36,7 @@ class TransactionAPI(Resource):
             if len(room_id) > 0:
                 key = uuid.uuid4().int
                 data = {
-                    'transactionID': str(key)[3,7],
+                    'transactionID': str(key)[0,6],
                     'userID': body['userID'],
                     'guestID': body['guestID'],
                     'roomID': body['roomID'],

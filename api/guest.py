@@ -15,18 +15,21 @@ class GuestAPI(Resource):
 
     def post(self) -> Response:
         body = request.get_json()
+        guest = Guests.objects(guestID=body['guestID'])
+        if len(guest) < 0:
 
-        key = uuid.uuid4().int
-        data = {
-            '_id': str(key)[3,7],
-            'userID': body['userID'],
-            'name': body['name'],
-            'tel': body['tel']
-        }
-
-        guest = Guests(**data)
-        guest.save()
-        return Response(status=201)
+            data = {
+                'guestID': body['guestID'],
+                'name': body['name'],
+                'tel': body['tel']
+            }
+            res = Guests(**data)
+            res.save()
+            return Response(status=201)
+            
+        else:
+            return Response("Already have guestID", status=400)
+       
 
     def get(self) -> Response:
         guest = Guests.objects()
@@ -43,31 +46,11 @@ class GuestAPI(Resource):
 class GuestIdAPI(Resource):
 
     def get(self) -> Response:
-        _id = request.args.get('_id')
-        guest = Guests.objects(_id=_id)
+        guestID = request.args.get('guestID')
+        guest = Guests.objects(guestID)
         if len(guest) > 0:
-            pipline = [
-                {"$match": {"_id": _id}},
-                {"$lookup":
-                     {'from': 'users', 'localField': 'userID', 'foreignField': '_id', 'as': 'users'},
-                 }
-            ]
-            cursor = Guests.objects.aggregate(pipline)
-
-            ls_guest = list(cursor)
-            user = list(ls_guest[0]['users'])
-
-            data = {
-                'guest_id': ls_guest[0]["_id"],
-                'guest_name': ls_guest[0]['name'],
-                'guest_tel': ls_guest[0]['tel'],
-                'staff_id': user[0]['_id'],
-                'staff_tel': user[0]['tel'],
-                'staff_gender': user[0]['gender'],
-                'staff_job_position': user[0]['job_position']
-            }
-
-            response = jsonify(data)
+        
+            response = jsonify(guest)
             response.status_code = 200
             return response
         else:

@@ -25,7 +25,7 @@ class SignUpAPI(Resource):
 
         key = uuid.uuid4().int
         data = {
-            '_id': str(key)[3,7],
+            '_id': str(key)[0,6],
             'username': body['username'],
             'password': body['password'],
             'name': body['name'],
