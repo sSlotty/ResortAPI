@@ -49,7 +49,7 @@ class GuestAPI(Resource):
             response.status_code =200
             return response
         else:
-            return Response("Not have guest ID" + body['guestID'] , status_code=400)
+            return Response("Not have guest ID" + body['guestID'] , status=400)
 
 
 class GuestIdAPI(Resource):
