@@ -35,6 +35,19 @@ class GuestAPI(Resource):
             response.status_code = 204
             return response
 
+    def put(self)->Response:
+        body = request.get_json()
+        guest = Guests.objects(guestID=body['guestID'])
+        if len(guest) > 0:
+
+            Guests.objects(guestID=body['guestID']).update(**body)
+
+            response = Response("Success to update guest")
+            response.status_code =200
+            return response
+        else:
+            return Response("Not have guest ID" + body['guestID'] , status_code=400)
+
 
 class GuestIdAPI(Resource):
 
