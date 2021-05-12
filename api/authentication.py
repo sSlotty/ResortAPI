@@ -102,7 +102,7 @@ def generate_token_response(user: str):
 
 class getUserAPI(Resource):
     def get(self) -> Response:
-        user = Users.objects.values_list('_id', 'name', 'tel', 'salary',)
+        user = Users.objects()
         if len(user) > 0:
             response = jsonify(user)
             response.status_code = 200
