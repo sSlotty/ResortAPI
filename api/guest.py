@@ -40,7 +40,10 @@ class GuestAPI(Resource):
         guest = Guests.objects(guestID=body['guestID'])
         if len(guest) > 0:
 
-            Guests.objects(guestID=body['guestID']).update(**body)
+            Guests.objects(guestID=body['guestID']).update(
+                set__name=body['name'],
+                set__tel=str(body['tel'])
+            )
 
             response = Response("Success to update guest")
             response.status_code =200
