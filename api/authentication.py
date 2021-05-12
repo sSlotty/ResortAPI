@@ -29,8 +29,7 @@ class SignUpAPI(Resource):
             'username': body['username'],
             'password': body['password'],
             'name': body['name'],
-            'tel': body['tel'],
-            'salary': body['salary']
+            'tel': body['tel']
         }
 
         user = Users(**data)
