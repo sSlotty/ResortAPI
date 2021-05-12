@@ -39,7 +39,7 @@ class GuestAPI(Resource):
         body = request.get_json()
         guest = Guests.objects(guestID=body['guestID'])
         if len(guest) > 0:
-
+            print(body)
             Guests.objects(guestID=body['guestID']).update(
                 set__name=body['name'],
                 set__tel=str(body['tel'])
