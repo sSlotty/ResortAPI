@@ -43,8 +43,8 @@ class GuestAPI(Resource):
                 set__tel=str(body['tel'])
             )
 
-        
-            return jsonify({"data":body,"message":"success","status":200})
+            # print(type(body))
+            return jsonify({"data":[body],"message":"success","status":200})
         else:
             return jsonify({"data":"Not have guest ID" ,"message":"error","status": 400})
 

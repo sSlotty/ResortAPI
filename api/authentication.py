@@ -99,12 +99,9 @@ def generate_token_response(user: str):
 
 class getUserAPI(Resource):
     def get(self) -> Response:
-        user = Users.objects()
+        user = Users.objects().values_list("username","name","staffID","tel")
         if len(user) > 0:
-            response = jsonify(user)
-            response.status_code = 200
-            return response
+            
+            return jsonify({"data":user, "message":"success","status":200})
         else:
-            response = Response()
-            response.status_code = 204
-            return response
+            return jsonify({"data":"null", "message":"error","error":204})
