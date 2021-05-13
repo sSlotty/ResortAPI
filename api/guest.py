@@ -19,9 +19,9 @@ class GuestAPI(Resource):
         if not len(guest) > 0:
 
             Guests(**body).save()
-            return jsonify({"data":body, "message":"","status":200})
+            return jsonify({"data":[body], "message":"","status":200})
         else:
-            return jsonify({"data":body, "message":"Already have user id","status":400})
+            return jsonify({"data":[body], "message":"Already have user id","status":400})
        
 
     def get(self) -> Response:

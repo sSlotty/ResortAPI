@@ -1,3 +1,4 @@
+import json
 from flask import request, Response, jsonify, current_app
 from flask_restful import Resource
 
@@ -22,17 +23,17 @@ class RoomAPI(Resource):
             })
             validate_result = schema.validate(body)
             if validate_result.get('success', False) is False:
-                return jsonify({"data":body, "message":"Argument error","status":400})
+                return jsonify({"data":[body], "message":"Argument error","status":400})
 
             try:
                 room = Rooms(**body)
                 room.save()
             
-                return jsonify({"data":body, "message":"success","status":201})
+                return jsonify({"data":[body], "message":"success","status":201})
             except NotUniqueError:
-                return jsonify({"data":body, "message":"error","status":400})
+                return jsonify({"data":[body], "message":"error","status":400})
         else:
-            return jsonify({"data":body, "message":"error","status":400})
+            return jsonify({"data":[body], "message":"error","status":400})
 
     def get(self) -> Response:
         room = Rooms.objects()
@@ -79,7 +80,7 @@ class RoomIdAPI(Resource):
                 set__room_status=body['room_status']
             )
             
-            return jsonify({"data":body, "message":"success","status":200})
+            return jsonify({"data":[body], "message":"success","status":200})
         else:
             return jsonify({"data":body, "message":"error","status":400})
 
