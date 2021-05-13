@@ -50,22 +50,30 @@ class TransactionAPI(Resource):
                 Rooms.objects(roomID=body['roomID']).update(
                     set__room_status="true"
                 )
-               
-                return jsonify({"data":data, "message":"success","status":201})
+
+                res = jsonify({"data":data, "message":"success","status":201})
+                res.status_code = 201
+                return res
 
             else:
-                return jsonify({"data":body, "message":"No have room number","status":400})
+                res = jsonify({"data":body, "message":"No have room number","status":400})
+                res.status_code = 400
+                return res
         else:
-            return jsonify({"data":body, "message":"Room is not alivable","status":400})
+            res = jsonify({"data":body, "message":"Room is not alivable","status":400})
+            res.status_code = 400
+            return res
 
     def get(self) -> Response:
         transaction = Transactions.objects()
         if len(transaction) > 0:
-            
-            return jsonify({"data":transaction, "message":"success","status":200})
+            res = jsonify({"data":transaction, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-           
-            return jsonify({"data":"null", "message":"error","status":204})
+            res = jsonify({"data":"null", "message":"error","status":204})
+            res.status_code = 204
+            return res
 
 
 class TransactionIdAPI(Resource):
@@ -114,10 +122,13 @@ class TransactionIdAPI(Resource):
                 }
             }
 
-           
-            return jsonify({"data":data, "message":"success","status":200})
+            res = jsonify({"data":data, "message":"success","status":200})
+            res.status_code = 200
+            return 
         else:
-            return jsonify({"data":"null", "message":"no have guestID","status":204})
+            res = jsonify({"data":"null", "message":"no have guestID","status":204})
+            res.status_code = 204
+            return res
 
 
 class CheckOutAPI(Resource):
@@ -189,19 +200,28 @@ class CheckOutAPI(Resource):
                     set__room_status='False'
                 )
 
-                
-                return jsonify({"data":data, "message":"success","status":200})
+                res = jsonify({"data":data, "message":"success","status":200})
+                res.status_code = 200
+                return res
             except NotUniqueError:
-                return jsonify({"data":"null", "message":"error","status":400})
+                res = jsonify({"data":"null", "message":"error","status":400})
+                res.status_code = 400
+                return res
         else:
-            return jsonify({"data":"null", "message":"error","status":400})
+            res = jsonify({"data":"null", "message":"error","status":400})
+            res.status_code = 400
+            return res
 
     def get(self)->Response:
         transaction = Transactions.objects()
         if len(transaction) > 0:
-            return jsonify({"data":transaction, "message":"success","status":200})
+            res = jsonify({"data":transaction, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            return jsonify({"data":"null", "message":"error","status":204})
+            res = jsonify({"data":"null", "message":"error","status":204})
+            res.status_code = 204
+            return res
 
 
 class getAllTransacByStatus(Resource):
@@ -210,10 +230,13 @@ class getAllTransacByStatus(Resource):
         status = request.args.get('status')
         transac = Transactions.objects(status=status)
         if len(transac) > 0:
-            
-            return jsonify({"data":transac, "message":"success","status":200})
+            res = jsonify({"data":transac, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            return jsonify({"data":"null", "message":"error","status":204})
+            res = jsonify({"data":"null", "message":"error","status":204})
+            res.status_code = 204
+            return res
 
 
 
@@ -223,9 +246,13 @@ class CheckOutIdAPI(Resource):
         id = request.args.get('id')
         transac = Transactions.objects(transactionID=id)
         if len(transac) > 0:
-            return jsonify({"data":transac, "message":"success","status":200})
+            res = jsonify({"data":transac, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            return jsonify({"data":"null", "message":"error","status":204})
+            res = jsonify({"data":"null", "message":"error","status":204})
+            res.status_code = 204
+            return res
 
     def post(self)->Response:
         body = request.get_json()
@@ -237,9 +264,13 @@ class CheckOutIdAPI(Resource):
                 set__status='False'
             )
             
-            return jsonify({"data":payment, "message":"success","status":200})
+            res = jsonify({"data":payment, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            return jsonify({"data":"null", "message":"error","status":204})
+            res = jsonify({"data":"null", "message":"error","status":204})
+            res.status_code = 204
+            return res
 
 
 

@@ -38,9 +38,13 @@ class SignUpAPI(Resource):
 
             user = Users(**data)
             user.save()
-            return jsonify({"data":[data], "message":"success","status":201})
+            res = jsonify({"data":[data], "message":"success","status":201})
+            res.status_code = 201
+            return res
         else:
-             return jsonify({"data":[body], "message":"error","status":400})
+            res = jsonify({"data":[body], "message":"error","status":400})
+            res.status_code = 400
+            return res
 
 class TokenAPI(Resource):
     # Login
@@ -106,7 +110,10 @@ class getUserAPI(Resource):
     def get(self) -> Response:
         user = Users.objects().values_list("username","name","staffID","tel")
         if len(user) > 0:
-            
-            return jsonify({"data":user, "message":"success","status":200})
+            res = jsonify({"data":user, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            return jsonify({"data":"null", "message":"error","error":204})
+            res = jsonify({"data":"null", "message":"error","error":204})
+            res.status_code = 204
+            return res

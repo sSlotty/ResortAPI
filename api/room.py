@@ -23,27 +23,35 @@ class RoomAPI(Resource):
             })
             validate_result = schema.validate(body)
             if validate_result.get('success', False) is False:
-                return jsonify({"data":[body], "message":"Argument error","status":400})
+                res = jsonify({"data":[body], "message":"Argument error","status":400})
+                res.status_code = 400
+                return res
 
             try:
                 room = Rooms(**body)
                 room.save()
-            
-                return jsonify({"data":[body], "message":"success","status":201})
+                res = jsonify({"data":[body], "message":"success","status":201})
+                res.status_code = 201
+                return res
             except NotUniqueError:
-                return jsonify({"data":[body], "message":"error","status":400})
+                res = jsonify({"data":[body], "message":"error","status":400})
+                res.status_code = 400
+                return res
         else:
-            return jsonify({"data":[body], "message":"error","status":400})
+            res = jsonify({"data":[body], "message":"error","status":400})
+            res.status_code = 400
+            return res
 
     def get(self) -> Response:
         room = Rooms.objects()
         if len(room) > 0:
-            
-            return jsonify({"data":room, "message":"success","status":200})
+            res = jsonify({"data":room, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            response = Response()
+            response = jsonify({"data":"null", "message":"error","status":204})
             response.status_code = 204
-            return jsonify({"data":"null", "message":"error","status":204})
+            return response
 
 
 class RoomIdAPI(Resource):
@@ -51,11 +59,13 @@ class RoomIdAPI(Resource):
         roomID = request.args.get('roomID')
         room = Rooms.objects(roomID=roomID)
         if len(room) > 0:
-        
-            return jsonify({"data":room, "message":"success","status":200})
+            res = jsonify({"data":room, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-        
-            return jsonify({"data":"null", "message":"error","status":204})
+            res = jsonify({"data":"null", "message":"error","status":204})
+            res.status_code = 204
+            return res
 
     def put(self) -> Response:
         body = request.get_json()
@@ -80,20 +90,26 @@ class RoomIdAPI(Resource):
                 set__room_status=body['room_status']
             )
             
-            return jsonify({"data":[body], "message":"success","status":200})
+            res = jsonify({"data":[body], "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            return jsonify({"data":body, "message":"error","status":400})
+            res = jsonify({"data":body, "message":"error","status":400})
+            res.status_code = 400
+            return res
 
     def delete(self) -> Response:
         body = request.get_json()
         room = Rooms.objects(roomID=body['roomID'])
         if len(room) > 0:
             room.delete()
-            
-            return jsonify({"data":room, "message":"success","status":200})
+            res = jsonify({"data":room, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            
-            return jsonify({"data":body, "message":"error","status":400})
+            res = jsonify({"data":body, "message":"error","status":400})
+            res.status_code = 400
+            return res
 
 
 class RoomStatus(Resource):
@@ -101,7 +117,10 @@ class RoomStatus(Resource):
         status = request.args.get('status')
         room = Rooms.objects(room_status=status)
         if len(room) > 0:
-            return jsonify({"data":room, "message":"success","status":200})
+            res = jsonify({"data":room, "message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            
-            return jsonify({"data":status, "message":"error","status":204})
+            res = jsonify({"data":status, "message":"error","status":204})
+            res.status_code = 204
+            return res

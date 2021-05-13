@@ -19,18 +19,24 @@ class GuestAPI(Resource):
         if not len(guest) > 0:
 
             Guests(**body).save()
-            return jsonify({"data":[body], "message":"","status":200})
+            res = jsonify({"data":[body], "message":"","status":200})
+            res.status_code = 200
+            return res
         else:
-            return jsonify({"data":[body], "message":"Already have user id","status":400})
+            res = jsonify({"data":[body], "message":"Already have user id","status":400})
+            res.status_code = 400
+            return res
        
 
     def get(self) -> Response:
         guest = Guests.objects()
         if len(guest) > 0:
-            
-            return jsonify({"data":guest ,"message":"success","status": 200})
+            res = jsonify({"data":guest ,"message":"success","status": 200})
+            res.status_code = 200
+            return res
         else:
             response = jsonify({"data":"error","message":"error","status":204})
+            response.status_code = 204
             return response
 
     def put(self)->Response:
@@ -44,9 +50,13 @@ class GuestAPI(Resource):
             )
 
             # print(type(body))
-            return jsonify({"data":[body],"message":"success","status":200})
+            res = jsonify({"data":[body],"message":"success","status":200})
+            res.status_code = 200
+            return res
         else:
-            return jsonify({"data":"Not have guest ID" ,"message":"error","status": 400})
+            res = jsonify({"data":"Not have guest ID" ,"message":"error","status": 400})
+            res.status_code = 400
+            return 
 
 
 class GuestIdAPI(Resource):
@@ -56,7 +66,10 @@ class GuestIdAPI(Resource):
         guest = Guests.objects(guestID=guestID)
         if len(guest) > 0:
         
-            
-            return jsonify({"data":guest ,"message":"success","status": 200})
+            res = jsonify({"data":guest ,"message":"success","status": 200})
+            res.status_code = 200
+            return res
         else:
-            return Response(jsonify({"data":"Not have guest ID" ,"message":"error","status": 400}))
+            res = jsonify({"data":"Not have guest ID" ,"message":"error","status": 204})
+            res.status_code = 204
+            return res
