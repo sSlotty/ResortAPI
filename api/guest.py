@@ -18,21 +18,19 @@ class GuestAPI(Resource):
         guest = Guests.objects(guestID=body['guestID'])
         if not len(guest) > 0:
 
-            res = Guests(**body).save()
-            return Response(status=201)
+            Guests(**body).save()
+            return jsonify({"data":body, "message":"","status":200})
         else:
-            return Response({"message":"Already have guestID", "status":400})
+            return jsonify({"data":body, "message":"Already have user id","status":400})
        
 
     def get(self) -> Response:
         guest = Guests.objects()
         if len(guest) > 0:
-            response = jsonify(guest)
-            response.status_code = 200
-            return response
+            
+            return jsonify({"data":guest ,"message":"success","status": 200})
         else:
-            response = Response()
-            response.status_code = 204
+            response = jsonify({"data":"error","message":"error","status":204})
             return response
 
     def put(self)->Response:
@@ -45,11 +43,10 @@ class GuestAPI(Resource):
                 set__tel=str(body['tel'])
             )
 
-            response = Response("Success to update guest")
-            response.status_code =200
-            return response
+        
+            return jsonify({"data":body,"message":"success","status":200})
         else:
-            return Response("Not have guest ID" + body['guestID'] , status=400)
+            return jsonify({"data":"Not have guest ID" ,"message":"error","status": 400})
 
 
 class GuestIdAPI(Resource):
@@ -59,8 +56,7 @@ class GuestIdAPI(Resource):
         guest = Guests.objects(guestID=guestID)
         if len(guest) > 0:
         
-            response = jsonify(guest)
-            response.status_code = 200
-            return response
+            
+            return jsonify({"data":guest ,"message":"success","status": 200})
         else:
-            return Response("No have guest ID", status=400)
+            return Response(jsonify({"data":"Not have guest ID" ,"message":"error","status": 400}))

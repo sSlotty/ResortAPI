@@ -34,9 +34,7 @@ class SignUpAPI(Resource):
 
         user = Users(**data)
         user.save()
-        response = Response()
-        response.status_code = 201
-        return response
+        return jsonify({"data":data, "message":"error","status":201})
 
 
 class TokenAPI(Resource):

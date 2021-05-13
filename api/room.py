@@ -22,29 +22,27 @@ class RoomAPI(Resource):
             })
             validate_result = schema.validate(body)
             if validate_result.get('success', False) is False:
-                return Response(status=400)
+                return jsonify({"data":body, "message":"Argument error","status":400})
 
             try:
                 room = Rooms(**body)
                 room.save()
-                response = Response()
-                response.status_code = 201
-                return response
+            
+                return jsonify({"data":body, "message":"success","status":201})
             except NotUniqueError:
-                return Response('room id is already exist', 400)
+                return jsonify({"data":body, "message":"error","status":400})
         else:
-            return Response('room id is already exist', 400)
+            return jsonify({"data":body, "message":"error","status":400})
 
     def get(self) -> Response:
         room = Rooms.objects()
         if len(room) > 0:
-            response = jsonify(room)
-            response.status_code = 200
-            return response
+            
+            return jsonify({"data":room, "message":"success","status":200})
         else:
             response = Response()
             response.status_code = 204
-            return response
+            return jsonify({"data":"null", "message":"error","status":204})
 
 
 class RoomIdAPI(Resource):
@@ -52,13 +50,11 @@ class RoomIdAPI(Resource):
         roomID = request.args.get('roomID')
         room = Rooms.objects(roomID=roomID)
         if len(room) > 0:
-            response = jsonify(room)
-            response.status_code = 200
-            return response
+        
+            return jsonify({"data":room, "message":"success","status":200})
         else:
-            response = Response()
-            response.status_code = 204
-            return response
+        
+            return jsonify({"data":"null", "message":"error","status":204})
 
     def put(self) -> Response:
         body = request.get_json()
@@ -82,23 +78,21 @@ class RoomIdAPI(Resource):
                 set__price=body['price'],
                 set__room_status=body['room_status']
             )
-            response = Response("Success to updated room")
-            response.status_code = 200
-            return response
+            
+            return jsonify({"data":body, "message":"success","status":200})
         else:
-            return Response("Not have room ID :" + roomID, status=400)
+            return jsonify({"data":body, "message":"error","status":400})
 
     def delete(self) -> Response:
         body = request.get_json()
         room = Rooms.objects(roomID=body['roomID'])
         if len(room) > 0:
             room.delete()
-            res = Response("Success to deltete room ID : " + body['roomID'])
-            res.status_code = 200
-            return res
+            
+            return jsonify({"data":room, "message":"success","status":200})
         else:
-            response = Response("no have room ID" + body['roomID'], status=400)
-            return response
+            
+            return jsonify({"data":body, "message":"error","status":400})
 
 
 class RoomStatus(Resource):
@@ -106,10 +100,7 @@ class RoomStatus(Resource):
         status = request.args.get('status')
         room = Rooms.objects(room_status=status)
         if len(room) > 0:
-            response = jsonify(room)
-            response.status_code = 200
-            return response
+            return jsonify({"data":room, "message":"success","status":200})
         else:
-            response = Response()
-            response.status_code = 204
-            return response
+            
+            return jsonify({"data":status, "message":"error","status":204})
