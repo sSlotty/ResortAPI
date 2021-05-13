@@ -24,19 +24,23 @@ class SignUpAPI(Resource):
     def post(self) -> Response:
         body = request.get_json()
 
-        key = uuid.uuid4().int
-        data = {
-            'staffID': str(key)[0:6],
-            'username': body['username'],
-            'password': body['password'],
-            'name': body['name'],
-            'tel': body['tel']
-        }
+        user = Users.objects(username=body['username'])
 
-        user = Users(**data)
-        user.save()
-        return jsonify({"data":data, "message":"error","status":201})
+        if not len(user) > 0:
+            key = uuid.uuid4().int
+            data = {
+                'staffID': str(key)[0:6],
+                'username': body['username'],
+                'password': body['password'],
+                'name': body['name'],
+                'tel': body['tel']
+            }
 
+            user = Users(**data)
+            user.save()
+            return jsonify({"data":[data], "message":"success","status":201})
+        else:
+             return jsonify({"data":[body], "message":"error","status":400})
 
 class TokenAPI(Resource):
     # Login
