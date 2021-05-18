@@ -32,7 +32,7 @@ class TransactionAPI(Resource):
         filter_status = list(room_id)
         status = filter_status[0]
 
-        if status == "False":
+        if status == "True":
             if len(room_id) > 0:
                 key = uuid.uuid4().int
                 data = {
@@ -48,7 +48,7 @@ class TransactionAPI(Resource):
                 transaction.save()
 
                 Rooms.objects(roomID=body['roomID']).update(
-                    set__room_status="true"
+                    set__room_status="False"
                 )
 
                 res = jsonify({"data":data, "message":"success","status":201})
@@ -196,8 +196,8 @@ class CheckOutAPI(Resource):
                 payment = Payments(**data_payment)
                 payment.save()
 
-                udRoom = Rooms.objects(roomID=room[0]['_id']).update(
-                    set__room_status='False'
+                Rooms.objects(roomID=room[0]['_id']).update(
+                    set__room_status='True'
                 )
 
                 res = jsonify({"data":data, "message":"success","status":200})
