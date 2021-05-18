@@ -61,7 +61,7 @@ class TransactionAPI(Resource):
             return res
 
     def get(self) -> Response:
-        transaction = Transactions.objects()
+        transaction = Transactions.objects().all().values_list('transactionID','guestID','roomID','check_in','status')
         if len(transaction) > 0:
             res = jsonify({"data":transaction, "message":"success","status":200})
             res.status_code = 200
@@ -100,7 +100,6 @@ class TransactionIdAPI(Resource):
 
             data = {
                 'transactionID': cursor_list[0]['_id'],
-                'transaction_date': cursor_list[0]['transaction_date'],
                 'room': {
                     'roomNum': room[0]['_id'],
                     'type': room[0]['roomType'],
