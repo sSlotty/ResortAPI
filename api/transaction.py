@@ -24,10 +24,6 @@ class TransactionAPI(Resource):
         })
         print(body)
 
-        validate_result = schema.validate(body)
-        if validate_result.get('success', False) is False:
-            return jsonify({"data":body, "message":"error","status":400})
-
         room_id = Rooms.objects(roomID=body['roomID']).values_list('room_status')
         filter_status = list(room_id)
         status = filter_status[0]
