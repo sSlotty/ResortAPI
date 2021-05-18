@@ -47,16 +47,16 @@ class TransactionAPI(Resource):
                     set__room_status="False"
                 )
 
-                res = jsonify({"data":data, "message":"success","status":201})
+                res = jsonify({"data":[None], "message":"success","status":201})
                 res.status_code = 201
                 return res
 
             else:
-                res = jsonify({"data":body, "message":"No have room number","status":400})
+                res = jsonify({"data":[None], "message":"No have room number","status":400})
                 res.status_code = 400
                 return res
         else:
-            res = jsonify({"data":body, "message":"Room is not alivable","status":400})
+            res = jsonify({"data":[None], "message":"Room is not alivable","status":400})
             res.status_code = 400
             return res
 
