@@ -63,7 +63,7 @@ class TransactionAPI(Resource):
             return res
 
     def get(self) -> Response:
-        transaction = Transactions.objects().all().values_list('transactionID','guestID','roomID','check_in','status')
+        transaction = Transactions.objects().all().values_list('transactionID','guestID','roomID','check_in','status','check_out','total_bill')
         if len(transaction) > 0:
             res = jsonify({"data":transaction, "message":"success","status":200})
             res.status_code = 200
@@ -111,7 +111,7 @@ class TransactionIdAPI(Resource):
             }
             print(data)
 
-            res = jsonify({"data":data, "message":"success","status":200})
+            res = jsonify({"data":[data], "message":"success","status":200})
             res.status_code = 200
             return res
         else:
@@ -187,7 +187,7 @@ class CheckOutAPI(Resource):
                     set__room_status='True'
                 )
 
-                res = jsonify({"data":data, "message":"success","status":200})
+                res = jsonify({"data":[None], "message":"success","status":200})
                 res.status_code = 200
                 return res
             except NotUniqueError:
