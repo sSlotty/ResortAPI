@@ -38,6 +38,8 @@ class TransactionAPI(Resource):
                     'roomID': body['roomID'],
                     'transaction_date': datetime.utcnow(),
                     'check_in': body['check_in'],
+                    'check_out': "None",
+                    'total_bill': "None",
                     'status': 'False'
                 }
                 transaction = Transactions(**data)
@@ -78,12 +80,10 @@ class TransactionIdAPI(Resource):
         transactionID = request.args.get('transactionID')
 
         transaction = Transactions.objects(transactionID=transactionID)
+        print(len(transaction))
         if len(transaction) > 0:
             pipline = [
                 {"$match": {"_id": transactionID}},
-                {"$lookup":
-                     {'from': 'users', 'localField': 'userID', 'foreignField': '_id', 'as': 'users'},
-                 },
                 {"$lookup":
                      {'from': 'guests', 'localField': 'guestID', 'foreignField': '_id', 'as': 'guest'}
                  },
@@ -95,31 +95,25 @@ class TransactionIdAPI(Resource):
             cursor = Transactions.objects.aggregate(pipline)
             cursor_list = list(cursor)
             guest = list(cursor_list[0]['guest'])
-            user = list(cursor_list[0]['users'])
             room = list(cursor_list[0]['room'])
 
             data = {
                 'transactionID': cursor_list[0]['_id'],
-                'room': {
-                    'roomNum': room[0]['_id'],
-                    'type': room[0]['roomType'],
-                    'price': room[0]['price'],
-                },
-                'guest': {
-                    'guest_id': guest[0]['_id'],
-                    'name': guest[0]['name'],
-                    'tel': guest[0]['tel'],
-                },
-                'staff': {
-                    'user_id': user[0]['_id'],
-                    'name': user[0]['name'],
-                    'tel': user[0]['tel'],
-                }
+                'check_in': cursor_list[0]['check_in'],
+                'check_out': cursor_list[0]['check_out'],
+                'total_bill': cursor_list[0]['total_bill'],
+                'roomNum': room[0]['_id'],
+                'roomType': room[0]['roomType'],
+                'roomPrice': room[0]['price'],
+                'guestID': guest[0]['_id'],
+                'guestName': guest[0]['name'],
+                'guestTel': guest[0]['tel'],
             }
+            print(data)
 
             res = jsonify({"data":data, "message":"success","status":200})
             res.status_code = 200
-            return 
+            return res
         else:
             res = jsonify({"data":"null", "message":"no have guestID","status":204})
             res.status_code = 204
@@ -133,9 +127,6 @@ class CheckOutAPI(Resource):
         pipline = [
             {"$match": {"_id": transaction}},
             {"$lookup":
-                 {'from': 'users', 'localField': 'userID', 'foreignField': '_id', 'as': 'users'},
-             },
-            {"$lookup":
                  {'from': 'guests', 'localField': 'guestID', 'foreignField': '_id', 'as': 'guest'}
              },
             {"$lookup":
@@ -148,7 +139,6 @@ class CheckOutAPI(Resource):
 
         if local[0]['status'] == 'False':
             guest = local[0]['guest']
-            staff = local[0]['users']
             room = local[0]['room']
 
             key = uuid.uuid4().int
@@ -161,13 +151,15 @@ class CheckOutAPI(Resource):
             data = {
                 'transactionID': transaction,
                 'room': room[0],
+                'roomID':room[0]["_id"],
+                'roomType':room[0]["_id"],
+                'roomID':room[0]["_id"],
+                'roomID':room[0]["_id"],
+
                 'price': price,
                 'guest': {
                     'name': guest[0]['name'],
                     'tel': guest[0]['tel']
-                },
-                'staff': {
-                    'name': staff[0]['name'],
                 },
                 'check_in': checkIN,
                 'check_out': checkOUT
@@ -175,12 +167,12 @@ class CheckOutAPI(Resource):
 
             Transactions.objects(transactionID=transaction).update(
                 set__status="True",
-                set__check_out=checkOUT
+                set__check_out=checkOUT,
+                set__total_bill=str(price),
             )
             data_payment = {
-                'paymentID': str(key)[0,5],
+                'paymentID': str(key)[0:5],
                 'transactionID': transaction,
-                'userID': staff[0]['_id'],
                 'guestID': guest[0]['_id'],
                 'room_price': room[0]['price'],
                 'total_bill': price,

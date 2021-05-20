@@ -10,4 +10,5 @@ class Transactions(Document):
     transaction_date = DateTimeField(required=True, default=datetime.utcnow())
     check_in = StringField(required=False)
     check_out = StringField(required=False)
+    total_bill = StringField(required=False)
     status = StringField(required=True)
